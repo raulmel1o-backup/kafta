@@ -1,4 +1,6 @@
-package com.travazap.kafta.broker;
+package com.travazap.kafta.broker.infra;
+
+import com.travazap.kafta.broker.domain.Message;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,10 +24,12 @@ public class ConsumerConnectionHandler extends Thread {
 
     @Override
     public void run() {
-        Message message;
+        log.info("Connection with consumer started");
 
-        do {
-            log.info();
-        } while (!message.getHeaders().get("mode").equals("leave"));
+//        Message message;
+//
+//        do {
+//
+//        } while (!message.getHeaders().get("mode").equals("leave"));
     }
 }

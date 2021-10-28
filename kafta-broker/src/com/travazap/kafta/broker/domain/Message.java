@@ -1,4 +1,4 @@
-package com.travazap.kafta.broker;
+package com.travazap.kafta.broker.domain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,5 +35,20 @@ public class Message {
 
     private String parseBody(String message) {
         return message.split(";")[1];
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("headers=");
+
+        for (String key : headers.keySet()) {
+            sb.append(key).append("=").append(headers.get(key)).append(",");
+        }
+
+        sb.append(";").append("body=").append(body);
+
+        return sb.toString();
     }
 }
