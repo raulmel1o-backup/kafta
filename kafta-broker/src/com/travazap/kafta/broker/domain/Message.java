@@ -1,39 +1,39 @@
-package com.travazap.kafta.broker.domain;
+package com.travazap.kafta.broker;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Message {
-    private Long id;
-    private Map<String, String> headers; // fixme: find a better solution to headers
-    private String body;
 
-    public Message(final Long id, final Map<String, String> headers, final String body) {
-        this.id = id;
-        this.headers = headers;
-        this.body = body;
-    }
+    private final Map<String, String> headers;
+    private final String body;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Message(final String message) {
+        this.headers = parseHeaders(message);
+        this.body = parseBody(message);
     }
 
     public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
     public String getBody() {
         return body;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    private Map<String, String> parseHeaders(final String message) {
+        final Map<String, String> mapHeaders = new HashMap<>();
+
+        final String[] headerStr = message.split(";")[0].split(",");
+
+        for (String param : headerStr) {
+            mapHeaders.put(param.split("=")[0], param.split("=")[1]);
+        }
+
+        return mapHeaders;
+    }
+
+    private String parseBody(String message) {
+        return message.split(";")[1];
     }
 }
