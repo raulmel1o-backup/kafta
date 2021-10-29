@@ -1,5 +1,7 @@
 package com.travazap.kafta.producer.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +25,12 @@ public class Message {
 
     private Map<String, String> parseHeaders(final String message) {
         final Map<String, String> mapHeaders = new HashMap<>();
+        mapHeaders.put("mode", "producer");
+        mapHeaders.put("datetime", LocalDateTime.now().toString());
 
         final String[] headerStr = message.split(";")[0].split(",");
+
+        if (headerStr.length == 1 || headerStr[0].isEmpty()) return mapHeaders;
 
         for (String param : headerStr) {
             mapHeaders.put(param.split("=")[0], param.split("=")[1]);
@@ -34,7 +40,7 @@ public class Message {
     }
 
     private String parseBody(String message) {
-        return message.split(";")[1];
+        return message.substring(message.indexOf(';') + 1);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.travazap.kafta.producer.infra;
 
+import com.travazap.kafta.producer.domain.Message;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -29,9 +31,10 @@ public class ConnectionHandler {
 
         while (true) {
             log.info("Enter input");
-            final String message = scanner.nextLine();
-            if (message.equals("exit()")) break;
+            final String input = scanner.nextLine();
+            if (input.equals("exit()")) break;
 
+            final Message message = new Message(input);
             out.println(message);
             out.flush();
         }

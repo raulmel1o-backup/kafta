@@ -32,6 +32,7 @@ public class ProducerConnectionHandler extends Thread {
 
                 if (input != null) {
                     final Message message = new Message(input);
+                    System.out.println(message.getBody());
                 }
             }
 
