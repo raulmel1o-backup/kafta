@@ -1,4 +1,4 @@
-package com.travazap.kafta.broker.domain;
+package com.travazap.kafta.producer.domain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,4 +51,5 @@ public class Message {
 
         return sb.toString();
     }
+
 }
