@@ -8,15 +8,12 @@ import java.util.logging.Logger;
 
 public class ConnectionHandler {
 
-    private static String MODE_PRODUCER = "mode=producer";
-
     private final Logger log;
     private final String host;
     private final Integer port;
 
     private Socket socket;
     private PrintWriter out;
-    private Scanner scanner;
 
     public ConnectionHandler(final String host, final String port) {
         this.log = Logger.getLogger(ConnectionHandler.class.getName());
@@ -25,11 +22,10 @@ public class ConnectionHandler {
     }
 
     public void handleConnection() throws IOException {
+        final Scanner scanner = new Scanner(System.in);
+
         socket = createSocket(host, port);
         out = new PrintWriter(socket.getOutputStream());
-        scanner = new Scanner(System.in);
-
-        startConnection();
 
         while (true) {
             log.info("Enter input");
@@ -40,7 +36,17 @@ public class ConnectionHandler {
             out.flush();
         }
 
+        closeConnection();
         log.info("Connection finished");
+    }
+
+    private void closeConnection() {
+        try {
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Socket createSocket(final String host, final Integer port) {
@@ -53,10 +59,5 @@ public class ConnectionHandler {
         }
 
         return clientSocket;
-    }
-
-    private void startConnection() {
-        out.println(MODE_PRODUCER);
-        out.flush();
     }
 }

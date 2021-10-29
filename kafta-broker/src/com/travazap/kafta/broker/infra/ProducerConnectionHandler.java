@@ -1,5 +1,7 @@
 package com.travazap.kafta.broker.infra;
 
+import com.travazap.kafta.broker.domain.Message;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,40 +17,45 @@ public class ProducerConnectionHandler extends Thread {
     public ProducerConnectionHandler(final Socket socket) throws IOException {
         this.log = Logger.getLogger(ProducerConnectionHandler.class.getName());
         this.socket = socket;
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.in = openInputStream();
     }
 
     @Override
     public void run() {
         log.info("Connection with producer started");
 
-        while (true) {
-            try {
-                final String message = in.readLine();
+        try {
+            while (true) {
+                final String input = in.readLine();
 
-                if (message != null) {
-                    System.out.println(message);
+                if (input != null && input.equals("exit()")) break;
+
+                if (input != null) {
+                    final Message message = new Message(input);
                 }
-
-//                message = new Message(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
-//            if (message == null) {
-//                // TODO: implement message null handling
-//                continue;
-//            }
-//            if (message.getHeaders().get("mode").equals("leave")) break;
-//
-//            if (message.getHeaders().get("topic") == null) {
-//                // TODO: implement message topic null handling
-//                continue;
-//            }
-
-
+            closeConnection();
+        } catch (IOException e) {
+            log.severe("IO error");
         }
+    }
 
-//        log.info("Connection with producer finished");
+    private BufferedReader openInputStream() throws IOException {
+        try {
+            return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Could not open input stream");
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
