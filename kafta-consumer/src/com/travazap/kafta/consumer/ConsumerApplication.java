@@ -5,7 +5,7 @@ import com.travazap.kafta.consumer.infra.ConnectionHandler;
 import java.io.IOException;    
 public class ConsumerApplication {
     private static String host = "localhost";
-    private static String port = "44444"; // TODO: definir porta padrão para consumer
+    private static String port = "6667"; // TODO: definir porta padrão para consumer
 
     public static void main(String[] args) throws IOException {
 

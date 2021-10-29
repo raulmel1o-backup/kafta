@@ -5,30 +5,37 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class ConnectionStarter {
-
-
+public class ConsumerConnectionStarter extends Thread {
 
     private final Logger log;
     private final Integer port;
     private final ServerSocket serverSocket;
 
-    public ConnectionStarter() throws IOException {
-        this.log = Logger.getLogger(ConnectionStarter.class.getName());
-        this.port = 6666;
+    public ConsumerConnectionStarter() throws IOException {
+        this.log = Logger.getLogger(ProducerConnectionStarter.class.getName());
+        this.port = 6667;
         this.serverSocket = startSocket(port);
     }
 
-    public ConnectionStarter(final Integer port) throws IOException {
-        this.log = Logger.getLogger(ConnectionStarter.class.getName());
+    public ConsumerConnectionStarter(final Integer port) throws IOException {
+        this.log = Logger.getLogger(ProducerConnectionStarter.class.getName());
         this.port = port;
         this.serverSocket = startSocket(this.port);
     }
 
-    public void runSocket() throws IOException {
+    @Override
+    public void run() {
+        try {
+            runSocket();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void runSocket() throws IOException {
         while (true) {
             final Socket socket = serverSocket.accept();
-            Thread producer = new ProducerConnectionHandler(socket);
+            Thread producer = new ConsumerConnectionHandler(socket);
             producer.start();
         }
     }
@@ -45,6 +52,4 @@ public class ConnectionStarter {
 
         return ss;
     }
-
-
 }
