@@ -2,9 +2,9 @@ package com.travazap.kafta.consumer.infra;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class ConnectionHandler {
@@ -14,10 +14,9 @@ public class ConnectionHandler {
     private final String host;
     private final Integer port;
 
-    private Socker socket;
+    private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private Scanner scanner;
 
     public ConnectionHandler(final String host, final String port) {
         this.log = Logger.getLogger(ConnectionHandler.class.getName());
@@ -40,9 +39,12 @@ public class ConnectionHandler {
                 break;
             }
         }
+
+        log.info("Connection finished");
+
     }
 
-    private Socker createSocket(final String host, final Integer port) {
+    private Socket createSocket(final String host, final Integer port) {
         Socket clientSocket;
 
         try {
