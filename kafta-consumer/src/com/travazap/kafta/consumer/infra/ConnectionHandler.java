@@ -31,14 +31,14 @@ public class ConnectionHandler {
 
         startConnection();
 
-        while(true) {
-            try {
-                in.readLine();
-            } catch (Exception noMoreMessages) {
-                System.out.println("No more messages.");
-                break;
-            }
-        }
+//        while(true) {
+//            try {
+//                System.out.println(in.readLine());
+//            } catch (Exception noMoreMessages) {
+//                System.out.println("No more messages.");
+//                break;
+//            }
+//        }
 
         log.info("Connection finished");
 

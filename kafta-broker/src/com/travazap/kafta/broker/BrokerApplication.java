@@ -1,9 +1,8 @@
 package com.travazap.kafta.broker;
 
-import com.travazap.kafta.broker.infra.ConnectionStarter;
+import com.travazap.kafta.broker.infra.ConsumerConnectionStarter;
+import com.travazap.kafta.broker.infra.ProducerConnectionStarter;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,20 +11,25 @@ import java.util.Scanner;
 
 public class BrokerApplication {
 
-    private static ConnectionStarter starter;
-    private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt";
+        private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt";
+//    private static final String BANNER_FILE_PATH = "./resources/banner.txt";
 
     public static void main(String[] args) throws IOException {
         printBanner();
 
+        ProducerConnectionStarter producerStarter;
+        ConsumerConnectionStarter consumerStarter;
         if (args.length != 0) {
             final Integer port = handleParameters(args);
-            starter = new ConnectionStarter(port);
+            producerStarter = new ProducerConnectionStarter(port);
+            consumerStarter = new ConsumerConnectionStarter(port + 1);
         } else {
-            starter = new ConnectionStarter();
+            producerStarter = new ProducerConnectionStarter();
+            consumerStarter = new ConsumerConnectionStarter();
         }
 
-        starter.runSocket();
+        producerStarter.start();
+        consumerStarter.start();
     }
 
     private static void printBanner() throws FileNotFoundException {
