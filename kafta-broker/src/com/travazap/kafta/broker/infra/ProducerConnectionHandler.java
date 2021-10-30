@@ -1,6 +1,6 @@
 package com.travazap.kafta.broker.infra;
 
-import com.travazap.kafta.broker.domain.Message;
+import com.travazap.kafta.broker.domain.message.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,8 +31,11 @@ public class ProducerConnectionHandler extends Thread {
                 if (input != null && input.equals("exit()")) break;
 
                 if (input != null) {
+                    System.out.println(input);
+
                     final Message message = new Message(input);
                     System.out.println(message.getBody());
+                    System.out.println(message.getHeadersAsString());
                 }
             }
 
