@@ -7,7 +7,7 @@ import java.io.IOException;
 public class ProducerApplication {
 
     private static String host = "localhost";
-    private static String port;
+    private static String port = "6666";
 
     public static void main(String[] args) throws IOException {
 
