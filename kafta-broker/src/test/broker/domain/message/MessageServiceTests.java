@@ -23,23 +23,19 @@ public class MessageServiceTests {
         this.service = new MessageService();
     }
 
-    public void Should_Get_All_Messages_From_Topic() {
+    public void Should_Get_All_Messages__From_Topic_After_Id() {
         repository.wipeDatabase();
         buildAndSaveMessages();
 
-        final List<Message> messages = repository.findAllByTopic("default");
+        final List<Message> messageList = service.findAllMessagesFromTopicAfterAnId("default", 2L);
 
-        if (messages.size() != 3) {
+        if (messageList.size() != 2) {
             throw new AssertionError();
         }
 
-        if (!messages.get(0).getBody().equals("spaciba!")) {
+        if (!messageList.get(0).getBody().equals("dale!")) {
             throw new AssertionError();
         }
-    }
-
-    public void Should_Get_All_Messages__From_Topic_After_Id() {
-
     }
 
     public void Should_Save_Message() {
@@ -63,7 +59,6 @@ public class MessageServiceTests {
     public static void main(String[] args) throws SQLException {
         final MessageServiceTests tests = new MessageServiceTests();
 
-        tests.Should_Get_All_Messages_From_Topic();
         tests.Should_Get_All_Messages__From_Topic_After_Id();
         tests.Should_Save_Message();
     }

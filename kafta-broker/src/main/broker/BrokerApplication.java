@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 public class BrokerApplication {
 
-//        private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt";
-    private static final String BANNER_FILE_PATH = "./resources/banner.txt";
+    private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt";
+//    private static final String BANNER_FILE_PATH = "./resources/banner.txt";
 
     public static void main(String[] args) throws IOException {
         printBanner();

@@ -41,11 +41,30 @@ public class MessageRepositoryTests {
 
         final List<Message> messages = repository.findAllByTopic("xesque");
 
+        if (messages.get(0).getId() != 1) {
+            throw new AssertionError();
+        }
+
         if (messages.size() != 2) {
             throw new AssertionError();
         }
 
         if (!messages.get(0).getBody().equals("hello world!")) {
+            throw new AssertionError();
+        }
+    }
+
+    public void Should_Get_All_Messages__From_Topic_After_Id() {
+        repository.wipeDatabase();
+        buildAndSaveMessages();
+
+        final List<Message> messageList = repository.findByTopicAndIdGreaterThan("default", 2L);
+
+        if (messageList.size() != 2) {
+            throw new AssertionError();
+        }
+
+        if (!messageList.get(0).getBody().equals("dale!")) {
             throw new AssertionError();
         }
     }
@@ -105,6 +124,7 @@ public class MessageRepositoryTests {
 
         tests.Should_Find_All_Messages();
         tests.Should_Find_All_Messages_In_Topic();
+        tests.Should_Get_All_Messages__From_Topic_After_Id();
         tests.Should_Find_Message_By_Id();
         tests.Should_Save_Message();
         tests.Should_Delete_Message();

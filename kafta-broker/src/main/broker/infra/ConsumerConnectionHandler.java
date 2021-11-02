@@ -1,5 +1,6 @@
 package main.broker.infra;
 
+import main.broker.domain.message.Message;
 import main.broker.domain.message.MessageService;
 
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ConsumerConnectionHandler extends Thread {
@@ -28,43 +30,32 @@ public class ConsumerConnectionHandler extends Thread {
 
     @Override
     public void run() {
+        while (true) {
+            try {
+                final String input = in.readLine();
 
-        try {
-            String a = in.readLine();
+                final String[] messageParameters = parseInput(input);
 
-            System.out.println(a);
+                final List<Message> newMessages = service.findAllMessagesFromTopicAfterAnId(messageParameters[0], Long.parseLong(messageParameters[1]));
 
-            String b = in.readLine();
-            System.out.println(b);
-        } catch (IOException e) {
-            e.printStackTrace();
+                for (Message message : newMessages) {
+                    out.println(message);
+                    out.flush();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-//        final String topic = getConsumerTopic();
-//
-//        log.info("Connection with consumer started on topic: ");
-//
-//        try {
-//            while (true) {
-//                final String input = in.readLine();
-//
-//                if (input != null && input.equals("exit()")) break;
-//
-//                if (input != null && input.contains("lastMessageIndex=")) {
-//                    String index = input.substring(input.indexOf("lastMessageIndex=") + "lastMessageIndex=".length());
-//
-////                    System.out.println(index);
-//                }
-//
-//                System.out.println(input);
-//
-//                out.println("dale");
-//            }
-//
-//            closeConnection();
-//        } catch (final IOException e) {
-//            e.printStackTrace();
-//        }
-//
+    }
+
+    private String[] parseInput(final String input) {
+        final String[] inputArr = new String[2];
+
+        inputArr[0] = input.split(",")[0].substring(6);
+        inputArr[1] = input.split(",")[1].substring(17);
+
+        return inputArr;
     }
 
     private String getConsumerTopic() {

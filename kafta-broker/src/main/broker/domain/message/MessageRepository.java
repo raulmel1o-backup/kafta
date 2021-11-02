@@ -19,6 +19,7 @@ public class MessageRepository {
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS 'messages'";
     private static final String SELECT_ALL = "SELECT * FROM messages";
     private static final String SELECT_BY_ID = "SELECT * FROM messages WHERE messages.id = '";
+    private static final String SELECT_BY_TOPIC_ID_GREATER_THAN = "SELECT * FROM messages WHERE messages.id > ";
     private static final String SELECT_BY_TOPIC = "SELECT * FROM messages WHERE messages.topic = '";
     private static final String INSERT = "INSERT INTO messages (headers, body, topic) VALUES('";
     private static final String DELETE_BY_ID = "DELETE FROM messages WHERE messages.id = '";
@@ -27,7 +28,8 @@ public class MessageRepository {
     private final Connection connection;
 
     public MessageRepository() throws SQLException {
-        this.connection = DriverManager.getConnection("jdbc:sqlite:./resources/broker.db");
+        this.connection = DriverManager.getConnection("jdbc:sqlite:kafta-broker/resources/broker.db");
+//        this.connection = DriverManager.getConnection("jdbc:sqlite:./resources/broker.db");
 
         try (Statement st = connection.createStatement()) {
             st.executeUpdate(CREATE_TABLE);
@@ -48,6 +50,23 @@ public class MessageRepository {
 
     public List<Message> findAllByTopic(final String topic) {
         return executeSelectMultipleInDB(SELECT_BY_TOPIC + topic + "'");
+    }
+
+    public List<Message> findByTopicAndIdGreaterThan(final String topic, final Long id) {
+        final List<Message> messages = new ArrayList<>();
+
+        try (Statement st = connection.createStatement()) {
+            String query = "SELECT * FROM messages WHERE messages.id > " + id + " AND messages.topic = '" + topic + "'";
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                messages.add(new Message(rs.getString("headers") + ";" + rs.getString("body"), rs.getInt("id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
     }
 
     public Message findById(final Integer id) {
@@ -76,7 +95,7 @@ public class MessageRepository {
             final ResultSet rs = st.executeQuery(query);
             rs.next();
 
-            return new Message(rs.getString("headers") + ";" + rs.getString("body"));
+            return new Message(rs.getString("headers") + ";" + rs.getString("body"), rs.getInt("id"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,7 +110,7 @@ public class MessageRepository {
             final ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-                messages.add(new Message(rs.getString("headers") + ";" + rs.getString("body")));
+                messages.add(new Message(rs.getString("headers") + ";" + rs.getString("body"), rs.getInt("id")));
             }
 
             return messages;
