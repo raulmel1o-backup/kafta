@@ -5,10 +5,10 @@ import java.io.PrintWriter;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class ConnectionHandler {
-    private static String MODE_CONSUMER = "mode=consumer";
 
     private final Logger log;
     private final String host;
@@ -17,11 +17,13 @@ public class ConnectionHandler {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
+    private Long lastMessageIndex;
 
     public ConnectionHandler(final String host, final String port) {
         this.log = Logger.getLogger(ConnectionHandler.class.getName());
         this.host = host;
         this.port = Integer.valueOf(port);
+        this.lastMessageIndex = 0L;
     }
 
     public void handleConnection() throws IOException {
@@ -29,19 +31,21 @@ public class ConnectionHandler {
         out = new PrintWriter(socket.getOutputStream());
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        startConnection();
+        log.info("Connection established with broker");
 
-//        while(true) {
-//            try {
-//                System.out.println(in.readLine());
-//            } catch (Exception noMoreMessages) {
-//                System.out.println("No more messages.");
-//                break;
-//            }
-//        }
+        out.println("topic=xesque");
+        out.flush();
 
-        log.info("Connection finished");
+        while (true) {
+            out.println("lastMessageIndex=" + lastMessageIndex);
+            out.flush();
 
+            String input = in.readLine();
+
+            if (input != null) {
+                System.out.println(input);
+            }
+        }
     }
 
     private Socket createSocket(final String host, final Integer port) {
@@ -57,7 +61,13 @@ public class ConnectionHandler {
     }
 
     private void startConnection() {
-        out.println(MODE_CONSUMER);
+        out.println("topic=xesque");
         out.flush();
+    }
+
+    private void closeConnection() throws IOException {
+        out.close();
+        in.close();
+        socket.close();
     }
 }

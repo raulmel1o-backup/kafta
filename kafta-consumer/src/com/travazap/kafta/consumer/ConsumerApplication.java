@@ -2,10 +2,12 @@ package com.travazap.kafta.consumer;
 
 import com.travazap.kafta.consumer.infra.ConnectionHandler;
 
-import java.io.IOException;    
+import java.io.IOException;
+
 public class ConsumerApplication {
+
     private static String host = "localhost";
-    private static String port = "6667"; // TODO: definir porta padrão para consumer
+    private static String port = "6667";
 
     public static void main(String[] args) throws IOException {
 
@@ -17,7 +19,7 @@ public class ConsumerApplication {
             }
         }
 
-        System.out.printf("Connecting to %s on port %s\n", host, port);
+//        System.out.printf("Connecting to %s on port %s\n", host, port);
 
         final ConnectionHandler connectionHandler = new ConnectionHandler(host, port);
         connectionHandler.handleConnection();
