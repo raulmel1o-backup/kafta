@@ -12,12 +12,6 @@ public class ProducerConnectionStarter extends Thread {
     private final Integer port;
     private final ServerSocket serverSocket;
 
-    public ProducerConnectionStarter() throws IOException {
-        this.log = Logger.getLogger(ProducerConnectionStarter.class.getName());
-        this.port = 6666;
-        this.serverSocket = startSocket(port);
-    }
-
     public ProducerConnectionStarter(final Integer port) throws IOException {
         this.log = Logger.getLogger(ProducerConnectionStarter.class.getName());
         this.port = port;

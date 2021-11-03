@@ -18,7 +18,7 @@ public class MessageService {
         return repository.findByTopicAndIdGreaterThan(topic, id);
     }
 
-    public void save(final Message message, final String topic) {
+    public void save(final Message message) {
         repository.save(message);
 
         log.info("New message stored in topic " + message.getTopic());

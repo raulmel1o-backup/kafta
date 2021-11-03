@@ -8,11 +8,11 @@ import java.util.List;
 
 public class MessageRepositoryTests {
 
-    private static final String textMessage1 = "mode=producer,user=raulmello,topic=xesque;hello world!";
-    private static final String textMessage2 = "mode=producer,user=Raulmello;spaciba!";
-    private static final String textMessage3 = "mode=producer,user=rAulmello,topic=xesque;cyka blyat!";
-    private static final String textMessage4 = "mode=producer,user=raUlmello;dale!";
-    private static final String textMessage5 = "mode=producer,user=rauLmello;xesque dele!";
+    private static final String textMessage1 = "xesque;hello world!";
+    private static final String textMessage2 = "default;spaciba!";
+    private static final String textMessage3 = "xesque;cyka blyat!";
+    private static final String textMessage4 = "default;dale!";
+    private static final String textMessage5 = "default;xesque dele!";
 
     private final MessageRepository repository;
 
@@ -100,25 +100,6 @@ public class MessageRepositoryTests {
         }
     }
 
-    public void Should_Delete_Message() {
-        repository.wipeDatabase();
-        buildAndSaveMessages();
-
-        if (repository.findAll().size() != 5) {
-            throw new AssertionError();
-        }
-
-        final Message message = repository.deleteMessage(2);
-
-        if (!message.getBody().equals("spaciba!")) {
-            throw new AssertionError();
-        }
-
-        if (repository.findAll().size() != 4) {
-            throw new AssertionError();
-        }
-    }
-
     public static void main(String[] args) throws SQLException {
         final MessageRepositoryTests tests = new MessageRepositoryTests();
 
@@ -127,7 +108,6 @@ public class MessageRepositoryTests {
         tests.Should_Get_All_Messages__From_Topic_After_Id();
         tests.Should_Find_Message_By_Id();
         tests.Should_Save_Message();
-        tests.Should_Delete_Message();
     }
 
     private void buildAndSaveMessages() {

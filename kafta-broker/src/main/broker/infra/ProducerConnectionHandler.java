@@ -32,14 +32,11 @@ public class ProducerConnectionHandler extends Thread {
             while (true) {
                 final String input = in.readLine();
 
-                System.out.println(input);
-
                 if (input != null && input.equals("exit()")) break;
 
                 if (input != null) {
                     final Message message = new Message(input);
-                    service.save(message, message.getTopic());
-
+                    service.save(message);
                 }
             }
 

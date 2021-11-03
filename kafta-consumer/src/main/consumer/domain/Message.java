@@ -1,69 +1,55 @@
 package main.consumer.domain;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 public class Message {
 
     private final Integer id;
-    private final Map<String, String> headers;
+    private final String topic;
     private final String body;
+    private final LocalDateTime datetime;
 
     public Message(final String message) {
         this.id = parseId(message);
-        this.headers = parseHeaders(message);
+        this.topic = parseTopic(message);
         this.body = parseBody(message);
+        this.datetime = parseDateTime(message);
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public String getTopic() {
+        return topic;
     }
 
     public String getBody() {
         return body;
     }
 
-    private Integer parseId(String message) {
-        return Integer.parseInt(message.substring(0, message.indexOf("{")));
+    public LocalDateTime getDatetime() {
+        return datetime;
     }
 
-    private Map<String, String> parseHeaders(String message) {
-        message = message.substring(1);
-
-        final Map<String, String> mapHeaders = new HashMap<>();
-
-        final String[] headerStr = message.split(";")[0].split(",");
-
-        for (String param : headerStr) {
-            mapHeaders.put(param.split("=")[0], param.split("=")[1]);
-        }
-
-        return mapHeaders;
+    private Integer parseId(final String message) {
+        return Integer.parseInt(message.split(";")[0]);
     }
 
-    private String parseBody(String message) {
-        message = message.substring(1);
-
+    private String parseTopic(final String message) {
         return message.split(";")[1];
+    }
+
+    private String parseBody(final String message) {
+        return message.split(";")[2];
+    }
+
+    private LocalDateTime parseDateTime(final String message) {
+        return LocalDateTime.parse(message.split(";")[3]);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-
-        sb.append("headers=");
-
-        for (String key : headers.keySet()) {
-            sb.append(key).append("=").append(headers.get(key)).append(",");
-        }
-
-        sb.append(";").append("body=").append(body);
-
-        return sb.toString();
+        return "id = " + id + ", topic = " + topic + ", body = " + body + ", datetime = " + datetime;
     }
-
 }

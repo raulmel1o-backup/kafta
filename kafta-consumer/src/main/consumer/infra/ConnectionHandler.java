@@ -2,6 +2,7 @@ package main.consumer.infra;
 
 import main.consumer.domain.Message;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.InputStreamReader;
@@ -10,6 +11,9 @@ import java.net.Socket;
 import java.util.logging.Logger;
 
 public class ConnectionHandler {
+
+    //    private static final String LMI_FILE_PATH = "./kafta-broker/resources/lmi.txt";
+    private static final String LMI_FILE_PATH = "./resources/lmi.txt";
 
     private final Logger log;
     private final String host;
@@ -37,16 +41,32 @@ public class ConnectionHandler {
         log.info("Connection established with broker");
 
         while (true) {
-            out.println("topic=" + topic + ",lastMessageIndex=" + lastMessageIndex);
+            out.println("topic=" + topic + ";lastMessageIndex=" + lastMessageIndex);
             out.flush();
 
             final String input = in.readLine();
 
-            if (input != null) {
+            if (!input.equals("no new messages")) {
                 final Message message = new Message(input);
-                lastMessageIndex = (long) message.getId();
+
+                if ((long) message.getId() <= lastMessageIndex) continue;
+
+                lastMessageIndex = updateLastMessageIndex(message.getId());
+
+                log.info(message.toString());
             }
         }
+    }
+
+    private Long updateLastMessageIndex(final Integer lmi) {
+        try (PrintWriter writer = new PrintWriter(LMI_FILE_PATH)) {
+            writer.write(lmi.toString());
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return (long) lmi;
     }
 
     private Socket createSocket(final String host, final Integer port) {
@@ -59,16 +79,5 @@ public class ConnectionHandler {
         }
 
         return clientSocket;
-    }
-
-    private void startConnection() {
-        out.println("topic=xesque");
-        out.flush();
-    }
-
-    private void closeConnection() throws IOException {
-        out.close();
-        in.close();
-        socket.close();
     }
 }
