@@ -1,32 +1,29 @@
 package main.broker.domain.message;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class Message {
 
     private Integer id;
-    private final Map<String, String> headers;
     private final String topic;
     private final String body;
+    private final LocalDateTime datetime;
+
+    public Message(final Integer id, final String topic, final String body, final String datetime) {
+        this.id = id;
+        this.topic = topic;
+        this.body = body;
+        this.datetime = LocalDateTime.parse(datetime);
+    }
 
     public Message(final String message) {
-        this.headers = parseHeaders(message);
-        this.topic = headers.getOrDefault("topic", "default");
+        this.topic = parseTopic(message);
         this.body = parseBody(message);
+        this.datetime = LocalDateTime.now();
     }
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(final Integer id) {
-        this.id = id;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
     }
 
     public String getTopic() {
@@ -37,44 +34,26 @@ public class Message {
         return body;
     }
 
-    public String getHeadersAsString() {
-        return "headers=" + headers.toString();
+    public LocalDateTime getDatetime() {
+        return datetime;
     }
 
-    private Map<String, String> parseHeaders(final String message) {
-        final Map<String, String> mapHeaders = new LinkedHashMap<>();
-        mapHeaders.put("datetime", LocalDateTime.now().toString());
-
-        final String[] headerStr = message.split(";")[0].split(",");
-        if (headerStr.length == 1 || headerStr[0].isEmpty()) return mapHeaders;
-
-        for (String param : headerStr) {
-            final String key = param.split("=")[0];
-            final String value = param.split("=")[1];
-
-            mapHeaders.put(key, value);
-        }
-
-        return mapHeaders;
+    private String parseTopic(final String message) {
+        return message.split(";")[0];
     }
 
-    private String parseBody(String message) {
-        return message.substring(message.indexOf(';') + 1);
+    private String parseBody(final String message) {
+        return message.split(";")[1];
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-
-        for (String key : headers.keySet()) {
-            sb.append(key).append("=").append(headers.get(key)).append(",");
+        if (id == null) {
+            return topic + ";" + body;
+        } else if (datetime == null) {
+            return id + ";" + topic + ";" + body;
         }
 
-        int a = sb.lastIndexOf(",");
-        sb.replace(a, a + 1, ";");
-
-        sb.append(body);
-
-        return sb.toString();
+        return id + ";" + topic + ";" + body + ";" + datetime;
     }
 }

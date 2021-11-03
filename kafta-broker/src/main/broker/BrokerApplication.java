@@ -11,25 +11,35 @@ import java.util.Scanner;
 
 public class BrokerApplication {
 
-//        private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt";
-    private static final String BANNER_FILE_PATH = "./resources/banner.txt";
+//    private static final String BANNER_FILE_PATH = "./kafta-broker/resources/banner.txt"; // run on IDE
+    private static final String BANNER_FILE_PATH = "./resources/banner.txt"; // run on terminal
+
+    private static final Scanner sc = new Scanner(System.in);
+
+    private static Integer producerPort = 6666;
+    private static Integer consumerPort = 6667;
 
     public static void main(String[] args) throws IOException {
         printBanner();
 
-        ProducerConnectionStarter producerStarter;
-        ConsumerConnectionStarter consumerStarter;
-        if (args.length != 0) {
-            final Integer port = handleParameters(args);
-            producerStarter = new ProducerConnectionStarter(port);
-            consumerStarter = new ConsumerConnectionStarter(port + 1);
-        } else {
-            producerStarter = new ProducerConnectionStarter();
-            consumerStarter = new ConsumerConnectionStarter();
-        }
+        getProducerPortFromTerminalInput();
+        getConsumerPortFromTerminalInput();
+
+        ProducerConnectionStarter producerStarter = new ProducerConnectionStarter(producerPort);
+        ConsumerConnectionStarter consumerStarter = new ConsumerConnectionStarter(consumerPort);
 
         producerStarter.start();
         consumerStarter.start();
+    }
+
+    private static void getProducerPortFromTerminalInput() {
+        System.out.println("Insert producer port (6666): ");
+        producerPort = sc.nextInt();
+    }
+
+    private static void getConsumerPortFromTerminalInput() {
+        System.out.println("Insert consumer port (6667): ");
+        consumerPort = sc.nextInt();
     }
 
     private static void printBanner() throws FileNotFoundException {
@@ -41,13 +51,5 @@ public class BrokerApplication {
             e.printStackTrace();
             throw new FileNotFoundException("Banner file was not found");
         }
-    }
-
-    private static Integer handleParameters(final String[] args) {
-        for (int i = 0; i < args.length; i += 2) {
-            if (args[i].equals("-p")) return Integer.parseInt(args[i + 1]);
-        }
-
-        throw new IllegalArgumentException("No port argument found");
     }
 }
