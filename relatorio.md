@@ -49,7 +49,7 @@ O código do Kafta foi escrito em Java, utilizando Sqlite como banco de dados. P
 - `make`  
 
 # Como executar
-Disponibilizamos para execução arquivos `.jar` para cada aplicação dentro da Kafta, ou seja, um executável para o Broker, um para o Consumer e outro para o Producer. Primeiramente execute o Broker, logo após o Producer e o Consumer. Dentro da interface com o Producer, blablabla precisa terminar ISSO DAQUI!!!!!!!!!
+Disponibilizamos para execução arquivos `.jar` para cada aplicação dentro da Kafta, ou seja, um executável para o Broker, um para o Consumer e outro para o Producer. Cada jar deve ser executado através do comando `java -jar /path/to/jarfile`. Primeiramente execute o Broker, logo após o Producer e o Consumer. Após a execução do Producer, será requisitado do usuário um input, ao passo que o mesmo deve digitar a mensagem e seu tópico, como especificado em [Protocolos de Comunicação - Consumidor](#consumidor). 
 
 # Como ler
 
@@ -64,4 +64,9 @@ Reduzir a quantidade de mensagens trocadas entre consumidor e broker.
 Banco de dados com persistência de tópicos, melhorar o sistema de atribuir ID às mensagens.
 
 # Bibliografia
-PREENCHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
+As seguintes referências foram consultadas para o desenvolvimento do Kafta, porém, nenhum trecho de código foi copiado dos sites.
+https://www.geeksforgeeks.org/socket-programming-in-java/  
+https://www.baeldung.com/a-guide-to-java-sockets  
+https://www.devmedia.com.br/como-criar-um-chat-multithread-com-socket-em-java/33639  
+https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html  
+https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
