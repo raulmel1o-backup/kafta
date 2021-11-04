@@ -1,3 +1,13 @@
+# Autores
+
+- Enrique Emanuel Rezende Tavares da Silva | 11796090
+
+- Gustavo Ryan Nasicmento Silva | 11796785
+
+- Lucas Vilela Aleixo | 11796249
+
+- Raul Mello Silva | 11870986
+
 # O Tema: EP de desenvolvimento de um sistema de mensageria
 Optamos por um EP de desenvolvimento, escolhemos um sistema de mensageria como tema, inspirado no Apache Kafka. Mensageria é um conceito que define que sistemas distribuídos possam se comunicar por meio de troca de mensagens (evento), sendo essas mensagens gerenciadas por uma aplicação.  
 Nosso sistema de mensageria se divide em: Producer, a aplicação que produz as mensagens, o Broker, que é responsável por gerenciar as mensagens, garantindo que cada mensagem seja enfileirada e armazenada até que seja consumida e o Consumer, que consome as mensagens de um tópico específico.  
