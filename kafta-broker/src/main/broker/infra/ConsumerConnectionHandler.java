@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ConsumerConnectionHandler extends Thread {
 
