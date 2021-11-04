@@ -1,1 +1,0 @@
-mode=producer,user=raulmello,date=2021-10-29;hello world!

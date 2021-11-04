@@ -1,4 +1,11 @@
+# Ignore IDEA files
 .idea
 .vscode
 *.iml
+out
+
+# Ignore MACOS files
 .DS_Store
+
+# Ignore broker SQLITE DB
+./kafta-broker/resources/broker.db
