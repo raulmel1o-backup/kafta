@@ -33,13 +33,19 @@ public class BrokerApplication {
     }
 
     private static void getProducerPortFromTerminalInput() {
+        final String input;
         System.out.println("Insert producer port (6666): ");
-        producerPort = sc.nextInt();
+
+        input = sc.nextLine();
+        if (!input.trim().isEmpty()) producerPort = Integer.parseInt(input);
     }
 
     private static void getConsumerPortFromTerminalInput() {
+        final String input;
         System.out.println("Insert consumer port (6667): ");
-        consumerPort = sc.nextInt();
+
+        input = sc.nextLine();
+        if (!input.trim().isEmpty()) producerPort = Integer.parseInt(input);
     }
 
     private static void printBanner() throws FileNotFoundException {
