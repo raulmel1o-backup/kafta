@@ -13,7 +13,7 @@ public class ConsumerConnectionStarter extends Thread {
     private final ServerSocket serverSocket;
 
     public ConsumerConnectionStarter(final Integer port) throws IOException {
-        this.log = Logger.getLogger(ProducerConnectionStarter.class.getName());
+        this.log = Logger.getLogger(ConsumerConnectionStarter.class.getName());
         this.port = port;
         this.serverSocket = startSocket(this.port);
     }
